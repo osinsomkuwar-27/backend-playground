@@ -14,17 +14,6 @@ async function main() {
     console.log("Connected to MongoDB");
 }
 
-let chat1 = new Chat({
-    from: "Alice",
-    to: "Bob",
-    msg: "Hello Bob!",
-    created_at: new Date() //helps in createing some random date 
-});
-
-chat1.save().then(res =>{
-    console.log(res)
-}).catch(err => console.log(err));
-
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
