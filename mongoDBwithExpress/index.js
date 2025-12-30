@@ -52,7 +52,7 @@ app.post("/chats", (req, res) => {
       })
       .catch((err) => {
         console.log("Error saving chat:", err);
-      }); // save to DB
+      });
     res.redirect("/chats");
   } catch (err) {
     console.log(err);
