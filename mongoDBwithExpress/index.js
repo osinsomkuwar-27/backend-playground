@@ -80,6 +80,13 @@ app.put("/chats/:id", async (req, res) => {
   res.redirect("/chats");
 });
 
+//Destroy Route
+app.delete("/chats/:id", async (req, res) => {
+  let { id } = req.params;
+  let deletedChat = await Chat.findByIdAndDelete(id);
+  res.redirect("/chats");
+});
+
 //Home Route
 app.get("/", (req, res) => {
   res.send("Hello World!");
