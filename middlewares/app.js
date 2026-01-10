@@ -18,19 +18,19 @@ const app = express();
 //   next();
 // });
 
-app.use("/api", (req,res,next) =>{
+const checkToken = (req,res,next) =>{
   let { token } = req.query;
   if(token === "giveaccess"){
   next();
 } 
 res.send("ACCESS DENIED");
-});
+};
 
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
 });
 
-app.get("/api", (req, res, next) =>{
+app.get("/api", checkToken, (req, res, next) =>{
   res.send("data");
   next();
 })
