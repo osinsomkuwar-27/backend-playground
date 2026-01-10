@@ -11,16 +11,29 @@ const app = express();
 //   next();
 // });
 
-//logger middleware
-app.use((req, res, next) =>{
-  req.time = new Date (Date.now());
-  console.log(req.method, req.hostname, req.path, req.time);
+// //logger middleware
+// app.use((req, res, next) =>{
+//   req.time = new Date (Date.now());
+//   console.log(req.method, req.hostname, req.path, req.time);
+//   next();
+// });
+
+app.use("/api", (req,res,next) =>{
+  let { token } = req.query;
+  if(token === "giveaccess"){
   next();
+} 
+res.send("ACCESS DENIED");
 });
 
 app.get("/", (req, res) => {
   res.send("Hi, I am root");
 });
+
+app.get("/api", (req, res, next) =>{
+  res.send("data");
+  next();
+})
 
 app.get("/random", (req, res) => {
   res.send("Random page");
