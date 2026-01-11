@@ -19,6 +19,11 @@ app.get("/api", checkToken, (req, res, next) => {
   next();
 });
 
+//Create an admin Route and send an error with a 403 status code
+app.get("/admin", (req, res) => {
+  throw new expressError(403, "Access to admin is forbidden");
+});
+
 app.use((err, req, res, next) => {
   let {status = 500, message = "Some error occured"} = err;
   res.status(status).send(message);
