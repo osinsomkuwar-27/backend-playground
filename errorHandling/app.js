@@ -2,10 +2,6 @@ const express = require('express');
 const app = express();
 const expressError = require("./expressError");
 
-app.listen(8080, () => {
-  console.log("Server is running on port 8080");
-});
-
 const checkToken = (req, res, next) => {
   let { token } = req.query;
   if (token === "giveaccess") {
@@ -23,8 +19,13 @@ app.get("/api", checkToken, (req, res, next) => {
   next();
 });
 
-app.get("/random", (req, res) => {
-  res.send("Random page");
+app.use((err, req, res, next) => {
+  let {status = 500, message = "Some error occured"} = err;
+  res.status(status).send(message);
+});
+
+app.listen(8080, () => {
+  console.log("Server is running on port 8080");
 });
 
 module.exports = app;
