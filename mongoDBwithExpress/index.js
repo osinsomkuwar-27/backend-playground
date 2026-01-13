@@ -42,7 +42,6 @@ app.get("/chats/new", (req, res) => {
 
 /// Create Route
 app.post("/chats", (req, res) => {
-  try {
     let { from, to, msg } = req.body;
 
     let newChat = new Chat({
@@ -61,10 +60,14 @@ app.post("/chats", (req, res) => {
         console.log("Error saving chat:", err);
       });
     res.redirect("/chats");
-  } catch (err) {
-    next(err);
-  }
 });
+
+//using wrapAsync function to handle errors in async route handlers
+function asyncWrap(fn){
+  return function(req, res, next){
+    fn(req, res, next).catch(err => next(err));
+  };
+}
 
 //NEW - Show Route
 app.get("/chats/:id", async(req, res, next) => {
@@ -79,19 +82,14 @@ app.get("/chats/:id", async(req, res, next) => {
 });
 
 //Edit Route
-app.get("/chats/:id/edit", async (req, res) => {
-  try{
+app.get("/chats/:id/edit", asyncWrap(async (req, res) => {
     let { id } = req.params;
   let chat = await Chat.findById(id);
   res.render("edit.ejs", { chat });
-  }catch(err){
-    next(err);
-  }
-});
+}));
 
 //Update Route
-app.put("/chats/:id", async (req, res) => {
-  try{
+app.put("/chats/:id", asyncWrap (async (req, res) => {
     let { id } = req.params;
     let { msg: newMsg } = req.body;
     let updatedChat = await Chat.findByIdAndUpdate(
@@ -100,10 +98,7 @@ app.put("/chats/:id", async (req, res) => {
       { runValidators: true, new: true }
     );
     res.redirect("/chats");
-  }catch(err){
-    next(err);
-  }
-});
+}));
 
 //Destroy Route
 app.delete("/chats/:id", async (req, res) => {
