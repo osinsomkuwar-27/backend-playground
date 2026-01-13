@@ -112,6 +112,15 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+//mongoose errors handling middleware
+app.use((req, res, next) => {
+  console.log(err.name);
+  if(err.name === "ValidationError"){
+    console.log("This is a Validation Error, please follow the rules");
+  }
+  next(err);
+});
+
 //Error Handling Middleware
 app.use((err, req, res, next) => {
   let { status = 500, message = "Some error occured" } = err;
